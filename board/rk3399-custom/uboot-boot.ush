@@ -1,0 +1,79 @@
+part start ${devtype} ${devnum} hassos-bootstate mmc_env
+${devtype} dev ${devnum}
+setenv fitimg_addr_r 280000
+setenv loadbootstate " \
+    echo 'loading env...'; \
+    ${devtype} read ${ramdisk_addr_r} ${mmc_env} 0x40; \
+    env import -c ${ramdisk_addr_r} 0x8000;"
+
+setenv storebootstate " \
+    echo 'storing env...'; \
+    env export -c -s 0x8000 ${ramdisk_addr_r} BOOT_ORDER BOOT_A_LEFT BOOT_B_LEFT MACHINE_ID; \
+    ${devtype} write ${ramdisk_addr_r} ${mmc_env} 0x40;"
+
+run loadbootstate
+test -n "${BOOT_ORDER}" || setenv BOOT_ORDER "A B"
+test -n "${BOOT_A_LEFT}" || setenv BOOT_A_LEFT 3
+test -n "${BOOT_B_LEFT}" || setenv BOOT_B_LEFT 3
+
+# Allows ConditionFirstBoot=
+test -n "${MACHINE_ID}" || setenv BOOT_CONDITION "systemd.condition-first-boot=true"
+
+# HassOS bootargs
+setenv bootargs_hassos "zram.enabled=1 zram.num_devices=3 systemd.machine_id=${MACHINE_ID} fsck.repair=yes ${BOOT_CONDITION}"
+
+# HassOS system A/B
+setenv bootargs_a "root=PARTUUID=e31b826a-52b9-4bec-946b-63a1893373c9 ro rootwait"
+setenv bootargs_b "root=PARTUUID=a7d2e7ad-b081-4d6b-9f37-a986aebfd921 ro rootwait"
+
+part number ${devtype} ${devnum} hassos-boot boot_partnum
+
+# Load environment from haos-config.txt
+if test -e ${devtype} ${devnum}:${boot_partnum} haos-config.txt; then
+  fatload ${devtype} ${devnum}:${boot_partnum} ${ramdisk_addr_r} haos-config.txt
+  env import -t ${ramdisk_addr_r} ${filesize}
+fi
+
+# Load extraargs
+fileenv ${devtype} ${devnum}:${boot_partnum} ${ramdisk_addr_r} cmdline.txt cmdline
+
+
+setenv bootargs
+for BOOT_SLOT in "${BOOT_ORDER}"; do
+  if test "x${bootargs}" != "x"; then
+    # skip remaining slots
+  elif test "x${BOOT_SLOT}" = "xA"; then
+    if test ${BOOT_A_LEFT} -gt 0; then
+      setexpr BOOT_A_LEFT ${BOOT_A_LEFT} - 1
+      echo "Trying to boot slot A, ${BOOT_A_LEFT} attempts remaining. Loading kernel ..."
+      part number ${devtype} ${devnum} hassos-kernel0 kernel_partnum
+      if load ${devtype} ${devnum}:${kernel_partnum} ${fitimg_addr_r} fit-Image.itb; then
+          setenv bootargs "${bootargs_hassos} ${bootargs_a} rauc.slot=A ${cmdline}"
+      fi
+    fi
+  elif test "x${BOOT_SLOT}" = "xB"; then
+    if test ${BOOT_B_LEFT} -gt 0; then
+      setexpr BOOT_B_LEFT ${BOOT_B_LEFT} - 1
+      echo "Trying to boot slot B, ${BOOT_B_LEFT} attempts remaining. Loading kernel ..."
+      part number ${devtype} ${devnum} hassos-kernel1 kernel_partnum
+      if load ${devtype} ${devnum}:${kernel_partnum} ${fitimg_addr_r} fit-Image.itb; then
+          setenv bootargs "${bootargs_hassos} ${bootargs_b} rauc.slot=B ${cmdline}"
+      fi
+    fi
+  fi
+done
+
+if test -n "${bootargs}"; then
+  run storebootstate
+else
+  echo "No valid slot found, resetting tries to 3"
+  setenv BOOT_A_LEFT 3
+  setenv BOOT_B_LEFT 3
+  run storebootstate
+  reset
+fi
+
+echo "Starting kernel"
+bootm ${fitimg_addr_r}
+
+echo "Boot failed, resetting..."

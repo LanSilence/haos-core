@@ -1,0 +1,9 @@
+compile_commands.json
+.vscode/settings.json
+cache/
+homeassistant-core/
+out/
+tool/toolchain/
+scripts/hdd-image.sh
+u-boot/*
+
