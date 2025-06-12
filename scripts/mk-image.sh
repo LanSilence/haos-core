@@ -30,22 +30,21 @@ HACODE=${2:-".."}/homeassistant-core/core-${HASS_VERSION:-2025.5.3}
 cd ubuntu
 
 if [ ! -f .ubuntuimg ]; then
-    TARGET=lite ./mk-base-ubuntu.sh 
-    TARGET=lite ./mk-ubuntu-rootfs.sh 
+    ./mk-rootfs.sh 
     echo "Ubuntu image not found, creating..."
-    TARGET=lite IMAGE_VERSION=22.04 ./mk-image.sh && touch .ubuntuimg
+    TARGET=lite IMAGE_VERSION=24.02 ./mk-image.sh && touch .ubuntuimg
 else
     echo "Ubuntu image already exists, skipping creation."
 fi
 if [ ! -f .homeassistantimg ]; then
     echo "Home Assistant image not found, creating..."
-    IMAGE_VERSION=22.04 ./mk-homeassistant.sh ${HACODE} && touch .homeassistantimg
+    IMAGE_VERSION=24.02 ./mk-homeassistant.sh ${HACODE} && touch .homeassistantimg
 else
     echo "Home Assistant image already exists, skipping creation."
 fi
 
 cp homeassistant.img "$IMAGEDIR"/homeassistant.img
-cp ubuntu-22.04-rootfs.img "$IMAGEDIR"/system.img
+cp ubuntu-24.02-rootfs.img "$IMAGEDIR"/system.img
 cd -
 
 

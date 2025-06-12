@@ -42,3 +42,18 @@ if [ ! -d homeassistant-core ] || [ -z "$(ls -A homeassistant-core 2>/dev/null)"
     mkdir -p homeassistant-core
     tar -xzf ${HASS_CACHE} -C homeassistant-core
 fi
+
+UBUNTU_BASE=https://cdimage.ubuntu.com/ubuntu-base/releases/noble/release/ubuntu-base-24.04.2-base-arm64.tar.gz
+UBUNTU_CACHE=cache/ubuntu-base
+TARGET_ROOTFS_DIR=ubuntu/binary
+if [ ! -f cache/.ubuntubase ]; then
+    wget -O ${UBUNTU_CACHE} ${UBUNTU_BASE} && touch cache/.ubuntubase
+fi
+if [ ! -d ubuntu/binary ] || [ -z "$(ls -A ubuntu/binary 2>/dev/null)" ]; then
+    mkdir -p ubuntu/binary
+    sudo tar -xzf ${UBUNTU_CACHE} -C ubuntu/binary
+    # sudo mkdir $TARGET_ROOTFS_DIR/lib/modules
+    # sudo chmod 0666 $TARGET_ROOTFS_DIR/lib/modules
+    sudo cp -b /etc/resolv.conf $TARGET_ROOTFS_DIR/etc/resolv.conf
+    sudo cp -b /usr/bin/qemu-aarch64-static $TARGET_ROOTFS_DIR/usr/bin/
+fi

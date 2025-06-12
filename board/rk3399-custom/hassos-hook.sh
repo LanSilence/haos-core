@@ -32,7 +32,7 @@ function hassos_pre_image() {
 	--inputpath "${IMAGEDIR}"  \
 	--outputpath "${IMAGEDIR}" \
 	--config "${BOARD_DIR}/bootloader-image.cfg" \
-    --rootpath "${IMAGEDIR}" 
+    --rootpath "${IMAGEDIR}/root" 
     # gen_bootloader_img
 
     loaderimage --pack --uboot ${OUTDIR}/u-boot-${UBOOT_VERSION}/u-boot.bin ${OUTDIR}/u-boot-${UBOOT_VERSION}/u-boot.img 0x200000
