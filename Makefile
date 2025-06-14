@@ -1,7 +1,7 @@
 ROOTDIR=$(shell pwd)
 OUTDIR=${ROOTDIR}/out
 
-TARGETS = rk3399-custom rk3399-pc 
+TARGETS = rk3399-custom H618-k2b
 
 .PHONY: rk3399-custom
 define FIND_TOOLCHAIN

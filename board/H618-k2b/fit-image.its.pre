@@ -1,0 +1,38 @@
+/dts-v1/;
+/ {
+    description = "RK3328 ROC-PC FIT Image";
+    #address-cells = <1>;
+    #size-cells = <0>;
+
+    images {
+        kernel-1 {
+            description = "H618 Kernel Image";
+            data = /incbin/("${KERNEL_IMAGE}");  // 指向压缩后的Image.gz
+            arch = "arm64";
+            os = "linux";
+            type = "kernel";
+            compression = "gzip";  // 指定gzip压缩
+            load = <0x40080000>;
+            entry = <0x40080000>;
+        };
+
+        fdt-2 {
+            description = "Device Tree Blob for H618 K2B";
+            data = /incbin/("${DTB_FILE}");
+            type = "flat_dt";
+            arch = "arm64";
+            compression = "none";
+            load = <0x4FA00000>;
+        };
+    };
+
+    configurations {
+        default = "config-1";
+        config-1 {
+            kernel = "kernel-1";
+            fdt = "fdt-2";
+        };
+    };
+};
+
+
