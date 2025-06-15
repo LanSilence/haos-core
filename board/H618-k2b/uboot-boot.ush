@@ -1,7 +1,7 @@
 
 ###########################################
 
-part start ${devtype} ${devnum} 8 mmc_env
+part start ${devtype} ${devnum} 11 mmc_env
 ${devtype} dev ${devnum}
 setenv loadbootstate " \
     echo 'loading env...'; \
