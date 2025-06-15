@@ -3,7 +3,8 @@ set -e
 
 TOOLCHAIN_SOURCE=https://snapshots.linaro.org/gnu-toolchain/12.2-2022.10-1/aarch64-linux-gnu/gcc-linaro-12.2.1-2022.10-x86_64_aarch64-linux-gnu.tar.xz
 TOOLCHAIN_CACHE=cache/toolchain.tar.xz
-
+mkdir -p cache
+mkdir -p tool/toolchain
 if [ ! -f cache/.toolchain ]; then
     wget -O ${TOOLCHAIN_CACHE} ${TOOLCHAIN_SOURCE} && touch cache/.toolchain
 fi
