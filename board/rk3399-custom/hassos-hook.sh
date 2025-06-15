@@ -43,6 +43,7 @@ function hassos_pre_image() {
     mkimage -f ${IMAGEDIR}/fit-image.its ${IMAGEDIR}/fit-Image.itb
 }
 mkdir -p "${IMAGEDIR}"
+mkdir -p "${OUTDIR}/root"
 hassos_pre_image
 echo "Bootloader images generated in ${IMAGEDIR}"
 

@@ -42,6 +42,7 @@ function hassos_pre_image() {
 }
 
 mkdir -p "${IMAGEDIR}"
+mkdir -p "${OUTDIR}/root"
 hassos_pre_image
 echo "Bootloader images generated in ${IMAGEDIR}"
 
