@@ -25,6 +25,11 @@ if [ ! -d "$IMAGEDIR" ]; then
     mkdir -p "$IMAGEDIR"
 fi
 
+if [ "${PARTITION_TYPE}" == "mbr" ]; then
+    mkdir -p "ubuntu/binary/usr/lib/udev/rules.d"
+    cp -f "./ubuntu/rootfs-diff/mbr-part.rules" "ubuntu/binary/usr/lib/udev/rules.d/"
+fi
+
 HACODE=${2:-".."}/homeassistant-core/core-${HASS_VERSION:-2025.5.3}
 
 cd ubuntu
