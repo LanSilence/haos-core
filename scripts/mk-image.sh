@@ -1,6 +1,6 @@
 #!/bin/bash
 set -ex
-
+VERSION=v1.0.0
 BOOTSTATE_SIZE=8M
 SYSTEM_SIZE=480M
 KERNEL_SIZE=24M
@@ -53,7 +53,7 @@ cp ubuntu-24.02-rootfs.img "$IMAGEDIR"/system.img
 cd -
 
 
-HAOS_IMAGE_NAME=haos-${BOARD_ID}-$(date +%Y%m%d).img
+HAOS_IMAGE_NAME=haos-${BOARD_ID}_${VERSION}-$(date +%Y%m%d).img
 if [ -f "$IMAGEDIR/$HAOS_IMAGE_NAME" ]; then
     echo "HAOS image $HAOS_IMAGE_NAME already exists, skipping creation."
 else
