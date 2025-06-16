@@ -36,8 +36,8 @@ else
 fi
 
 # 拷贝 dtb 文件
-if [ -d "$DTB_FILE" ]; then
-    cp "$DTB_FILE"/*.dtb "$IMAGEDIR/" 2>/dev/null || true
+if [ -f "$DTB_FILE" ]; then
+    cp "$DTB_FILE" "$IMAGEDIR/" 2>/dev/null || true
     echo "Copied dtb files to $IMAGEDIR/"
 else
     echo "Warning: Kernel DTB $DTB_FILE not found."
