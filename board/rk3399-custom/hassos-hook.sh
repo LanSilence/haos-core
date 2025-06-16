@@ -27,7 +27,7 @@ function hassos_pre_image() {
     cp "${BOARD_DIR}/boot-env.txt" "${IMAGEDIR}/haos-config.txt"
     cp "${BOARD_DIR}/cmdline.txt" "${IMAGEDIR}/cmdline.txt"
     mkimage -C none -A arm -T script -d ${BOARD_DIR}/uboot-boot.ush ${IMAGEDIR}/boot.scr  
-    loaderimage --pack --uboot ${OUTDIR}/u-boot-${UBOOT_VERSION}/u-boot.bin ${OUTDIR}/u-boot-${UBOOT_VERSION}/u-boot.img 0x200000
+    ${BOARD_DIR}/rkbin/loaderimage --pack --uboot ${OUTDIR}/u-boot-${UBOOT_VERSION}/u-boot.bin ${OUTDIR}/u-boot-${UBOOT_VERSION}/u-boot.img 0x200000
     cp ${OUTDIR}/u-boot-${UBOOT_VERSION}/u-boot.img ${IMAGEDIR}/u-boot.img
     tool/genimage    \
 	--tmppath "${OUTDIR}/tmp"    \
