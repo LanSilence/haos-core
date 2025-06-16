@@ -19,7 +19,7 @@ jobs:
     - name: Install QEMU and dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libconfuse-dev qemu-user-static make gcc u-boot-tools
+        sudo apt-get install -y libconfuse-dev qemu-user-static make gcc u-boot-tools mtools
         pip install pyelftools
   
     - name: Install dependencies
