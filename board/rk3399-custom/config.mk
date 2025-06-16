@@ -8,4 +8,5 @@ UBOOT_VERSION=2025.01
 HASS_VERSION=2025.5.3
 MAKE_UBOOT_ARGS="BL31=${ROOTDIR}/board/rk3399-custom/rkbin/rk3399_bl31_v1.36.elf"
 DTB_NAME="rockchip/rk3399-custom.dtb"
+UBOOOT_BIN="u-boot.img"
 KERNEL_FILE=fit-Image.itb

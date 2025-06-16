@@ -10,3 +10,4 @@ MAKE_UBOOT_ARGS="BL31=${ROOTDIR}/board/H618-k2b/sunxibin/bl31.bin"
 DTB_NAME="allwinner/sun50i-h618-k2b.dtb"
 KERNEL_FILE=fit-Image.itb
 PARTITION_TYPE=mbr
+UBOOOT_BIN="u-boot-sunxi-with-spl.bin"

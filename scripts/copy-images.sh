@@ -15,7 +15,7 @@ IMAGEDIR=${OUTDIR}/images
 mkdir -p "$IMAGEDIR"
 
 # 假设 u-boot 产物在 u-boot 目录下，kernel 产物在 linux/arch/arm64/boot 下
-UBOOT_IMG=${OUTDIR}/u-boot-${UBOOT_VERSION}/u-boot.img
+UBOOT_IMG=${OUTDIR}/u-boot-${UBOOT_VERSION}/${UBOOT_BIN_IMG:-u-boot.img}
 KERNEL_IMG=${OUTDIR}/linux-${LINUX_VERSION}/arch/arm64/boot/Image
 DTB_FILE=${OUTDIR}/linux-${LINUX_VERSION}/arch/arm64/boot/dts/$DTB_NAME
 
