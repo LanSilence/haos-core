@@ -27,7 +27,7 @@ index e88c1fbac..695815d10 100644
  
 diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h618-k2b.dts b/arch/arm64/boot/dts/allwinner/sun50i-h618-k2b.dts
 new file mode 100644
-index 000000000..b8ff8fe76
+index 000000000..473bae8e0
 --- /dev/null
 +++ b/arch/arm64/boot/dts/allwinner/sun50i-h618-k2b.dts
 @@ -0,0 +1,222 @@
@@ -251,7 +251,7 @@ index 000000000..b8ff8fe76
 +
 +&usbphy {
 +	usb1_vbus-supply = <&reg_vcc5v>;
-+	status = "okay";
++	status = "disabled";
 +};
 diff --git a/arch/arm64/configs/H618-linux-defconfig b/arch/arm64/configs/H618-linux-defconfig
 new file mode 100644
