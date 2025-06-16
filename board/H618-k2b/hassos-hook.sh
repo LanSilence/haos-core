@@ -30,7 +30,7 @@ function hassos_pre_image() {
 	--inputpath "${IMAGEDIR}"  \
 	--outputpath "${IMAGEDIR}" \
 	--config "${BOARD_DIR}/bootloader-image.cfg" \
-    --rootpath "${IMAGEDIR}/root" 
+    --rootpath "${OUTDIR}/root" 
     # gen_bootloader_img
 
     loaderimage --pack --uboot ${OUTDIR}/u-boot-${UBOOT_VERSION}/u-boot.bin ${OUTDIR}/u-boot-${UBOOT_VERSION}/u-boot.img 0x200000
@@ -44,5 +44,6 @@ function hassos_pre_image() {
 mkdir -p "${IMAGEDIR}"
 mkdir -p "${OUTDIR}/root"
 hassos_pre_image
+rm -rf "${OUTDIR}/root"
 echo "Bootloader images generated in ${IMAGEDIR}"
 
