@@ -68,6 +68,7 @@ export BOOTSTATE_SIZE SYSTEM_SIZE KERNEL_SIZE OVERLAY_SIZE DATA_SIZE HASS_SIZE I
 # 	--config "genimage/images-os.cfg" \
 #     --rootpath "${OUTDIR}/root" 
 
+rm -rf ${OUTDIR}/tmp/*
 tool/genimage --rootpath ${OUTDIR} \
     --tmppath "${OUTDIR}/tmp" \
     --inputpath "$IMAGEDIR" \
