@@ -33,7 +33,6 @@ function hassos_pre_image() {
     --rootpath "${OUTDIR}/root" 
     # gen_bootloader_img
 
-    loaderimage --pack --uboot ${OUTDIR}/u-boot-${UBOOT_VERSION}/u-boot.bin ${OUTDIR}/u-boot-${UBOOT_VERSION}/u-boot.img 0x200000
     KERNEL_IMAGE=${OUTDIR}/linux-${LINUX_VERSION}/arch/arm64/boot/Image.gz
     DTB_FILE=${OUTDIR}/linux-${LINUX_VERSION}/arch/arm64/boot/dts/$DTB_NAME
     export KERNEL_IMAGE DTB_FILE
