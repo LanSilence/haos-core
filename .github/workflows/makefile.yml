@@ -25,3 +25,12 @@ jobs:
   
     - name: Install dependencies
       run: make
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-outputs
+        path: |
+          out/images/haos*.img
+
+        retention-days: 7          # 自定义保留天数[7](@ref)
