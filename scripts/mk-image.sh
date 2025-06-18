@@ -43,7 +43,7 @@ else
 fi
 if [ ! -f .homeassistantimg ]; then
     echo "Home Assistant image not found, creating..."
-    IMAGE_VERSION=24.02 ./mk-homeassistant.sh ${HACODE} && touch .homeassistantimg
+    sudo IMAGE_VERSION=24.02 ./mk-homeassistant.sh ${HACODE} && touch .homeassistantimg
 else
     echo "Home Assistant image already exists, skipping creation."
 fi

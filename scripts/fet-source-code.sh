@@ -43,6 +43,18 @@ if [ ! -d homeassistant-core ] || [ -z "$(ls -A homeassistant-core 2>/dev/null)"
     tar -xzf ${HASS_CACHE} -C homeassistant-core
 fi
 
+# 解压并覆盖官方 translations（如有 translations.zip）
+TRANSLATIONS_ZIP=prebuild/translations/translations5.3.zip
+TRANSLATIONS_TAR=translations.tar.gz
+TRANSLATIONS_DIR=homeassistant-core/core-${HASS_VERSION}/
+if [ ! -f cache/.translations ] && [ -f $TRANSLATIONS_ZIP ]; then
+    unzip -o $TRANSLATIONS_ZIP -d $TRANSLATIONS_DIR
+    if [ -f ${TRANSLATIONS_DIR}/$TRANSLATIONS_TAR ]; then
+        tar -xzf  ${TRANSLATIONS_DIR}/$TRANSLATIONS_TAR -C ${TRANSLATIONS_DIR} && touch cache/.translations
+        rm -rf ${TRANSLATIONS_DIR}/$TRANSLATIONS_TAR
+    fi
+fi
+
 UBUNTU_BASE=https://cdimage.ubuntu.com/ubuntu-base/releases/noble/release/ubuntu-base-24.04.2-base-arm64.tar.gz
 UBUNTU_CACHE=cache/ubuntu-base
 TARGET_ROOTFS_DIR=ubuntu/binary
