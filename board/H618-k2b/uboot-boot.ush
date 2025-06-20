@@ -3,20 +3,17 @@
 part start ${devtype} ${devnum} 11 mmc_env
 ${devtype} dev ${devnum}
 
-setenv storebootstate " \
-    echo 'storing env...'; \
-    saveenv;"
+setenv storebootstate "echo storing env...;saveenv;"
 
 test -n "${BOOT_ORDER}" || setenv BOOT_ORDER "A B"
 test -n "${BOOT_A_LEFT}" || setenv BOOT_A_LEFT 3
 test -n "${BOOT_B_LEFT}" || setenv BOOT_B_LEFT 3
 
 # Allows ConditionFirstBoot=
-if test -n "${MACHINE_ID}"; then
-##
-else
+if test -z "${MACHINE_ID}"; then
   setenv BOOT_CONDITION "systemd.condition-first-boot=true"
   setenv bootargs
+  saveenv
 fi
 
 # HassOS bootargs
@@ -38,12 +35,9 @@ setenv bootargs_b "root=PARTUUID=48617373-09 ro rootwait"
 # 8. bootstate
 # 9. overlay
 # 10. data
-# 记录原始尝试次数
-setenv ORIG_BOOT_A_LEFT ${BOOT_A_LEFT}
-setenv ORIG_BOOT_B_LEFT ${BOOT_B_LEFT}
 
 setenv slot_tried ""
-for BOOT_SLOT in "${BOOT_ORDER}"; do
+for BOOT_SLOT in ${BOOT_ORDER}; do
   if test "x${bootargs}" != "x"; then
     # skip remaining slots
   elif test "x${BOOT_SLOT}" = "xA"; then
@@ -53,7 +47,8 @@ for BOOT_SLOT in "${BOOT_ORDER}"; do
       setenv bootargs
       echo "Trying to boot slot A, ${BOOT_A_LEFT} attempts remaining. Loading kernel ..."
       if load ${devtype} ${devnum}:5 ${loadaddr} fit-Image.itb; then
-          setenv bootargs "${bootargs_hassos} ${bootargs_a} rauc.slot=A ${cmdline}"
+        setenv loadkernel "load ${devtype} ${devnum}:5 ${loadaddr} fit-Image.itb" 
+        setenv bootargs "${bootargs_hassos} ${bootargs_a} rauc.slot=A ${cmdline}"
       fi
     fi
   elif test "x${BOOT_SLOT}" = "xB"; then
@@ -63,23 +58,21 @@ for BOOT_SLOT in "${BOOT_ORDER}"; do
       setenv bootargs
       echo "Trying to boot slot B, ${BOOT_B_LEFT} attempts remaining. Loading kernel ..."
       if load ${devtype} ${devnum}:8 ${loadaddr} fit-Image.itb; then
-          setenv bootargs "${bootargs_hassos} ${bootargs_b} rauc.slot=B ${cmdline}"
+        setenv loadkernel "load ${devtype} ${devnum}:8 ${loadaddr} fit-Image.itb"
+        setenv bootargs "${bootargs_hassos} ${bootargs_b} rauc.slot=B ${cmdline}"
       fi
     fi
   fi
-
 done
 
-# 只有尝试次数变化时才写env
+
 if test "x${slot_tried}" != "x"; then
-  if test ! ${BOOT_A_LEFT} -eq ${ORIG_BOOT_A_LEFT} || test ! ${BOOT_B_LEFT} -eq ${ORIG_BOOT_B_LEFT}; then
-    run storebootstate
-  fi
+  run storebootstate
+else
+  run loadkernel
 fi
 
-if test -n "${bootargs}"; then
-  # 启动正常时不再无条件写env，已在上面 slot_tried 逻辑处理
-else
+if test -z "${bootargs}"; then
   echo "No valid slot found, resetting tries to 3"
   setenv BOOT_A_LEFT 3
   setenv BOOT_B_LEFT 3
@@ -87,8 +80,7 @@ else
   reset
 fi
 
-printenv bootargs
-echo "Starting kernel"
+echo "Starting kernel....."
 bootm ${loadaddr}
 
 echo "Boot failed, resetting..."

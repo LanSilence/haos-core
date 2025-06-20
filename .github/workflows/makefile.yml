@@ -23,8 +23,11 @@ jobs:
         sudo apt-get install -y libconfuse-dev qemu-user-static make gcc u-boot-tools mtools erofs-utils
         pip install pyelftools
   
-    - name: Install dependencies
+    - name: build H618-k2b
       run: make H618-k2b
+
+    - name: build RK3399-custom
+      run: make rk3399-custom
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
