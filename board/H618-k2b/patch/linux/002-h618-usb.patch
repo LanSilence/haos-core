@@ -1,0 +1,37 @@
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h618-k2b.dts b/arch/arm64/boot/dts/allwinner/sun50i-h618-k2b.dts
+index 473bae8e0..5c7f5a9a0 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-h618-k2b.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h618-k2b.dts
+@@ -53,6 +53,7 @@ reg_vcc5v: vcc5v {
+ 		regulator-min-microvolt = <5000000>;
+ 		regulator-max-microvolt = <5000000>;
+ 		regulator-always-on;
++		gpio = <0>;
+ 	};
+ 
+ 	reg_vcc3v3: vcc3v3 {
+@@ -201,22 +202,12 @@ &uart0 {
+ };
+ 
+ &usbotg {
+-	/*
+-	 * PHY0 pins are connected to a USB-C socket, but a role switch
+-	 * is not implemented: both CC pins are pulled to GND.
+-	 * The VBUS pins power the device, so a fixed peripheral mode
+-	 * is the best choice.
+-	 * The board can be powered via GPIOs, in this case port0 *can*
+-	 * act as a host (with a cable/adapter ignoring CC), as VBUS is
+-	 * then provided by the GPIOs. Any user of this setup would
+-	 * need to adjust the DT accordingly: dr_mode set to "host",
+-	 * enabling OHCI0 and EHCI0.
+-	 */
++
+ 	dr_mode = "peripheral";
+ 	status = "okay";
+ };
+ 
+ &usbphy {
+ 	usb1_vbus-supply = <&reg_vcc5v>;
+-	status = "disabled";
++	status = "okay";
+ };
