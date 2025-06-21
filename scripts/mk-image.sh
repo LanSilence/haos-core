@@ -12,6 +12,7 @@ OUTDIR=${3:-"output"}
 IMAGEDIR=${3:-"output"}/images
 BOARD_DIR=${1:-"rk3399-custom"}
 TARGET_CONFIG=${1:-"rk3399-custom"}/config.mk
+SCRIPTS_DIR=$(dirname "$(readlink -f "$0")")
 # 读取 config 文件
 
 if [ -f "$TARGET_CONFIG" ]; then
@@ -76,4 +77,6 @@ tool/genimage --rootpath ${OUTDIR} \
     --includepath genimage:"$BOARD_DIR"\
     --config "genimage/genimage.cfg" 
 
-rm $IMAGEDIR/system.img $IMAGEDIR/homeassistant.img
+rm $IMAGEDIR/homeassistant.img
+export TARGET_CONFIG IMAGEDIR OUTDIR BOARD_ID
+$SCRIPTS_DIR/mk-raucbundle.sh 

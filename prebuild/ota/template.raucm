@@ -1,0 +1,15 @@
+[update]
+compatible=haos-rauc
+version=24.04.1 
+description=Home Assistant OS Update
+build=20240621
+
+
+[image.rootfs]
+filename=system.img
+
+
+[image.kernel]
+filename=kernel.img
+
+
