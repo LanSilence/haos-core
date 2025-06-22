@@ -13,6 +13,9 @@ IMAGEDIR=${3:-"output"}/images
 BOARD_DIR=${1:-"rk3399-custom"}
 TARGET_CONFIG=${1:-"rk3399-custom"}/config.mk
 SCRIPTS_DIR=$(dirname "$(readlink -f "$0")")
+SYSTEM_VERSION=$(cat VERSION)
+
+export OUTDIR IMAGEDIR BOARD_DIR TARGET_CONFIG SCRIPTS_DIR SYSTEM_VERSION
 # 读取 config 文件
 
 if [ -f "$TARGET_CONFIG" ]; then
@@ -33,6 +36,9 @@ fi
 
 HACODE=${2:-".."}/homeassistant-core/core-${HASS_VERSION:-2025.5.3}
 
+
+# 设置版本号
+sed -i "s/VERSION_ID=\".*\"/VERSION_ID=\"${SYSTEM_VERSION}\"/" ubuntu/rootfs-overlay/usr/lib/os-release
 cd ubuntu
 
 if [ ! -f .ubuntuimg ]; then
@@ -78,5 +84,5 @@ tool/genimage --rootpath ${OUTDIR} \
     --config "genimage/genimage.cfg" 
 
 rm $IMAGEDIR/homeassistant.img
-export TARGET_CONFIG IMAGEDIR OUTDIR BOARD_ID
+export TARGET_CONFIG IMAGEDIR OUTDIR BOARD_ID SYSTEM_VERSION
 $SCRIPTS_DIR/mk-raucbundle.sh 

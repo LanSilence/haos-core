@@ -2,8 +2,8 @@
 compatible=haos-rauc
 version=24.04.1 
 description=Home Assistant OS Update
-build=20240621
-
+[hooks]
+filename=switch-slot.sh
 
 [image.rootfs]
 filename=system.img
@@ -11,5 +11,6 @@ filename=system.img
 
 [image.kernel]
 filename=kernel.img
+hooks=post-install
 
 
