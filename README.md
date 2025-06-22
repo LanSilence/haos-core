@@ -38,6 +38,16 @@
 ### 1. 环境准备
 - 推荐 Ubuntu 20.04+/Debian 10+，需安装 `make`、`gcc`、`bison`、`flex`、`bc`、`git`、`python3`、`qemu-user-static` 等常用工具。
 - 工程会自动下载和准备交叉编译工具链，无需手动配置。
+```bash
+
+# 下载代码 
+git clone --recurse-submodules https://github.com/LanSilence/haos-core.git
+
+# 安装依赖
+sudo apt-get update
+sudo apt-get install -y libconfuse-dev qemu-user-static make gcc u-boot-tools mtools erofs-utils
+pip install pyelftools
+```
 
 ### 2. 一键编译
 
