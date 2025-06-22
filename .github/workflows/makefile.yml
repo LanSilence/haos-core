@@ -21,7 +21,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libconfuse-dev qemu-user-static make gcc u-boot-tools mtools erofs-utils
-        pip install pyelftools
+        pip install pyelftools rauc
   
     - name: build H618-k2b
       run: make H618-k2b
