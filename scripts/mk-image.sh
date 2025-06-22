@@ -86,3 +86,4 @@ tool/genimage --rootpath ${OUTDIR} \
 rm $IMAGEDIR/homeassistant.img
 export TARGET_CONFIG IMAGEDIR OUTDIR BOARD_ID SYSTEM_VERSION
 $SCRIPTS_DIR/mk-raucbundle.sh 
+rm $IMAGEDIR/system.img
