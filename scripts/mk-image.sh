@@ -36,6 +36,7 @@ fi
 
 HACODE=${2:-".."}/homeassistant-core/core-${HASS_VERSION:-2025.5.3}
 
+${SCRIPTS_DIR}/rauc.sh
 
 # 设置版本号
 sed -i "s/VERSION_ID=\".*\"/VERSION_ID=\"${SYSTEM_VERSION}\"/" ubuntu/rootfs-overlay/usr/lib/os-release

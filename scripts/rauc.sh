@@ -42,7 +42,7 @@ function install_rauc_certs() {
     if ! openssl verify -CAfile "${SCRIPTS_DIR}/../prebuild/ota/haos-ota-cert.pem" -no-CApath "${cert}"; then
         echo "Adding self-signed certificate to keyring."
         sudo mkdir -p "${TARGET_DIR}/etc/rauc"
-        sudo openssl x509 -in "${cert}" -text | sudo tee "${TARGET_DIR}/etc/rauc/keyring.pem"
+        sudo openssl x509 -in "${cert}" -text | sudo tee -a "${TARGET_DIR}/etc/rauc/keyring.pem"
     fi
 }
 
