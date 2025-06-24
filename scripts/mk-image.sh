@@ -41,21 +41,8 @@ ${SCRIPTS_DIR}/rauc.sh
 # 设置版本号
 sed -i "s/VERSION_ID=\".*\"/VERSION_ID=\"${SYSTEM_VERSION}\"/" ubuntu/rootfs-overlay/usr/lib/os-release
 cd ubuntu
-
-if [ ! -f .ubuntuimg ]; then
-    ./mk-rootfs.sh 
-    echo "Ubuntu image not found, creating..."
-    TARGET=lite IMAGE_VERSION=24.02 ./mk-image.sh && touch .ubuntuimg
-else
-    ./scripts/build.sh
-    echo "Ubuntu image already exists, skipping creation."
-fi
-if [ ! -f .homeassistantimg ]; then
-    echo "Home Assistant image not found, creating..."
-    sudo IMAGE_VERSION=24.02 ./mk-homeassistant.sh ${HACODE} && touch .homeassistantimg
-else
-    echo "Home Assistant image already exists, skipping creation."
-fi
+UBUNTU_SCRIPTS_DIR=$(pwd)/scripts
+${UBUNTU_SCRIPTS_DIR}/build.sh ${HACODE}
 
 cp homeassistant.img "$IMAGEDIR"/homeassistant.img
 cp ubuntu-24.02-rootfs.img "$IMAGEDIR"/system.img

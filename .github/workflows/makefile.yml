@@ -35,5 +35,6 @@ jobs:
         name: build-outputs
         path: |
           out/images/haos*.img
+          out/images/*.raucb
 
         retention-days: 7          # 自定义保留天数[7](@ref)
