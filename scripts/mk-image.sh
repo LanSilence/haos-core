@@ -45,7 +45,7 @@ UBUNTU_SCRIPTS_DIR=$(pwd)/scripts
 ${UBUNTU_SCRIPTS_DIR}/build.sh ${HACODE}
 
 cp homeassistant.img "$IMAGEDIR"/homeassistant.img
-cp ubuntu-24.02-rootfs.img "$IMAGEDIR"/system.img
+cp ubuntu-24.04-rootfs.img "$IMAGEDIR"/system.img
 cd -
 
 
