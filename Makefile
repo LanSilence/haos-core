@@ -27,7 +27,7 @@ $(TARGETS):
 	cp ${ROOTDIR}/board/$@/linux-config ${OUTDIR}/linux-${LINUX_VERSION}/.config
 	make -C linux/linux-${LINUX_VERSION} O=${OUTDIR}/linux-${LINUX_VERSION} ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} olddefconfig
 	make -C linux/linux-${LINUX_VERSION} O=${OUTDIR}/linux-${LINUX_VERSION}  ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE}  -j12
-	sudo rm -rf ${OUTDIR}/linux-${LINUX_VERSION}/lib/modules/${LINUX_VERSION}
+	sudo rm -rf ${OUTDIR}/linux-${LINUX_VERSION}/lib/modules/
 	sudo make -C linux/linux-${LINUX_VERSION} O=${OUTDIR}/linux-${LINUX_VERSION}  INSTALL_MOD_STRIP=1 ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} -j12 \
 		modules_install INSTALL_MOD_PATH=${ROOTDIR}/ubuntu/binary
 	@echo "==> 编译 u-boot"
