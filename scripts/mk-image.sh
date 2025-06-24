@@ -47,6 +47,7 @@ if [ ! -f .ubuntuimg ]; then
     echo "Ubuntu image not found, creating..."
     TARGET=lite IMAGE_VERSION=24.02 ./mk-image.sh && touch .ubuntuimg
 else
+    ./scripts/build.sh
     echo "Ubuntu image already exists, skipping creation."
 fi
 if [ ! -f .homeassistantimg ]; then
