@@ -14,6 +14,8 @@ if test -z "${MACHINE_ID}"; then
   setenv BOOT_CONDITION "systemd.condition-first-boot=true"
   setenv bootargs
   saveenv
+else
+  setenv BOOT_CONDITION
 fi
 
 # HassOS bootargs

@@ -1,6 +1,6 @@
 [update]
 compatible=haos-rauc
-version=24.04.1 
+version=0.00.06
 description=Home Assistant OS Update
 [hooks]
 filename=switch-slot.sh
