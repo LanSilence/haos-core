@@ -3,10 +3,11 @@ set -e
 
 TARGET_DIR=${1:-"/rk3399-custom"}
 # 定义 patch 路径
+SOURCE_DIR=source
 LINUX_PATCH_DIR=${TARGET_DIR}/patch/linux
 UBOOT_PATCH_DIR=${TARGET_DIR}/patch/u-boot
-LINUX_SOURCE_DIR=linux/linux-${LINUX_VERSION:-6.12}
-UBOOT_SOURCE_DIR=u-boot/u-boot-${UBOOT_VERSION:-2025.01}
+LINUX_SOURCE_DIR=${SOURCE_DIR}/linux/linux-${LINUX_VERSION:-6.12}
+UBOOT_SOURCE_DIR=${SOURCE_DIR}/u-boot/u-boot-${UBOOT_VERSION:-2025.01}
 
 TARGET_CONFIG=${1:-"rk3399-custom"}/config.mk
 # 读取 config 文件

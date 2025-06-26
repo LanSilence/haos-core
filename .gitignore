@@ -8,3 +8,4 @@ scripts/hdd-image.sh
 u-boot/*
 
 .cache/
+source

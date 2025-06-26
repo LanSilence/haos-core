@@ -2,7 +2,7 @@ ROOTDIR=$(shell pwd)
 OUTDIR=${ROOTDIR}/out
 
 TARGETS = rk3399-custom H618-k2b
-
+SOURCE_DIR = ${ROOTDIR}/source
 .PHONY: rk3399-custom
 define FIND_TOOLCHAIN
 $(shell find ${ROOTDIR}/tool/toolchain -type f -name 'aarch64-linux-gnu-gcc' | head -n1 | xargs dirname | xargs -I{} echo {}/aarch64-linux-gnu-)
@@ -25,17 +25,17 @@ $(TARGETS):
 	@echo "==> 编译 linux 内核"
 	mkdir -p ${OUTDIR}/linux-${LINUX_VERSION}/
 	cp ${ROOTDIR}/board/$@/linux-config ${OUTDIR}/linux-${LINUX_VERSION}/.config
-	make -C linux/linux-${LINUX_VERSION} O=${OUTDIR}/linux-${LINUX_VERSION} ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} olddefconfig
-	make -C linux/linux-${LINUX_VERSION} O=${OUTDIR}/linux-${LINUX_VERSION}  ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE}  -j12
+	make -C ${SOURCE_DIR}/linux/linux-${LINUX_VERSION} O=${OUTDIR}/linux-${LINUX_VERSION} ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} olddefconfig
+	make -C ${SOURCE_DIR}/linux/linux-${LINUX_VERSION} O=${OUTDIR}/linux-${LINUX_VERSION}  ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE}  -j12
 	sudo rm -rf ${OUTDIR}/linux-${LINUX_VERSION}/lib/modules/
-	sudo make -C linux/linux-${LINUX_VERSION} O=${OUTDIR}/linux-${LINUX_VERSION}  INSTALL_MOD_STRIP=1 ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} -j12 \
+	sudo make -C ${SOURCE_DIR}/linux/linux-${LINUX_VERSION} O=${OUTDIR}/linux-${LINUX_VERSION}  INSTALL_MOD_STRIP=1 ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} -j12 \
 		modules_install INSTALL_MOD_PATH=${ROOTDIR}/ubuntu/binary
 	@echo "==> 编译 u-boot"
 	mkdir -p ${OUTDIR}/u-boot-${UBOOT_VERSION}/
 	cp ${ROOTDIR}/board/$@/uboot-config ${OUTDIR}/u-boot-${UBOOT_VERSION}/.config
-	make -C u-boot/u-boot-${UBOOT_VERSION} O=${OUTDIR}/u-boot-${UBOOT_VERSION} \
+	make -C ${SOURCE_DIR}/u-boot/u-boot-${UBOOT_VERSION} O=${OUTDIR}/u-boot-${UBOOT_VERSION} \
 			ARCH=arm CROSS_COMPILE=${CROSS_COMPILE}  olddefconfig
-	make -C u-boot/u-boot-${UBOOT_VERSION} O=${OUTDIR}/u-boot-${UBOOT_VERSION} \
+	make -C ${SOURCE_DIR}/u-boot/u-boot-${UBOOT_VERSION} O=${OUTDIR}/u-boot-${UBOOT_VERSION} \
 			-j8 ARCH=arm CROSS_COMPILE=${CROSS_COMPILE} ${MAKE_UBOOT_ARGS}
 
 	@echo "==> 编译 执行hook脚本"

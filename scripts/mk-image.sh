@@ -34,7 +34,7 @@ if [ "${PARTITION_TYPE}" == "mbr" ]; then
     sudo cp -f "./ubuntu/rootfs-diff/mbr-part.rules" "ubuntu/binary/usr/lib/udev/rules.d/"
 fi
 
-HACODE=${2:-".."}/homeassistant-core/core-${HASS_VERSION:-2025.5.3}
+HACODE=${2:-".."}/source/homeassistant-core/core-${HASS_VERSION:-2025.5.3}
 
 ${SCRIPTS_DIR}/rauc.sh
 
