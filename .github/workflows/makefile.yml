@@ -26,6 +26,9 @@ jobs:
     - name: build RK3399-custom
       run: make rk3399-custom
 
+    - name: clean build
+      run: make clean
+
     - name: build H618-k2b
       run: make H618-k2b
 

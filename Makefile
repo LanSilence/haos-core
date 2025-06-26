@@ -47,3 +47,26 @@ $(TARGETS):
 	@echo "==> 制作 镜像"
 	@bash scripts/mk-image.sh ${ROOTDIR}/board/$@  ${ROOTDIR} ${OUTDIR} 
 	@echo "==> 完成 board/$@"
+
+clean:
+	@echo "==> 清理编译产物"
+	rm -rf ${OUTDIR}/linux-${LINUX_VERSION}
+	rm -rf ${OUTDIR}/u-boot-${UBOOT_VERSION}
+	sudo rm -rf ${ROOTDIR}/ubuntu/binary/
+	rm -rf ${ROOTDIR}/ubuntu/*.img
+	rm -rf ${OUTDIR}/*.gz
+	rm -rf ${OUTDIR}/*.tar.gz
+	rm -rf ${OUTDIR}/*.zip
+	rm -rf ${ROOTDIR}/ubuntu/.homeassistantimg
+	rm -rf ${ROOTDIR}/ubuntu/.ubuntuimg
+
+cleanall: clean
+	@echo "==> 清理所有编译产物"
+	rm -rf ${OUTDIR}
+	rm -rf ${ROOTDIR}/tool/toolchain
+	rm -rf ${ROOTDIR}/ubuntu/binary
+	rm -rf ${ROOTDIR}/ubuntu/*.img
+	rm -rf ${ROOTDIR}/ubuntu/.homeassistantimg
+	rm -rf ${ROOTDIR}/ubuntu/.ubuntuimg
+
+PHONY: clean cleanall $(TARGETS)
