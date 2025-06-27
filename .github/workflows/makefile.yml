@@ -29,9 +29,9 @@ jobs:
     - name: swap satrt
       run: |
         fallocate -l 2G ./swapfile
-        sudo chmod 600 /swapfile
-        sudo mkswap /swapfile
-        sudo swapon /swapfile
+        sudo chmod 600 ./swapfile
+        sudo mkswap ./swapfile
+        sudo swapon ./swapfile
 
     - name: build RK3399-custom
       run: make rk3399-custom
