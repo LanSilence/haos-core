@@ -36,14 +36,14 @@ function write_rauc_config() {
 
 function install_rauc_certs() {
     local cert="${OUT_DIR}/cert.pem"
-    sudo mkdir -p ${TARGET_DIR}/etc/rauc
-    sudo cp "${SCRIPTS_DIR}/../prebuild/ota/haos-ota-cert.pem" "${TARGET_DIR}/etc/rauc/keyring.pem"
+    mkdir -p ${TARGET_DIR}/etc/rauc
+    cp "${SCRIPTS_DIR}/../prebuild/ota/haos-ota-cert.pem" "${TARGET_DIR}/etc/rauc/keyring.pem"
     # Add local self-signed certificate (if not trusted by the dev or release
     # certificate it is a self-signed certificate, dev-ca.pem contains both)
     if ! openssl verify -CAfile "${SCRIPTS_DIR}/../prebuild/ota/haos-ota-cert.pem" -no-CApath "${cert}"; then
         echo "Adding self-signed certificate to keyring."
-        sudo mkdir -p "${TARGET_DIR}/etc/rauc"
-        sudo openssl x509 -in "${cert}" -text | sudo tee -a "${TARGET_DIR}/etc/rauc/keyring.pem"
+        mkdir -p "${TARGET_DIR}/etc/rauc"
+        openssl x509 -in "${cert}" -text | tee -a "${TARGET_DIR}/etc/rauc/keyring.pem"
     fi
 }
 

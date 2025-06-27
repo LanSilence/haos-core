@@ -16,15 +16,15 @@ finish() {
     exit 1
 }
 trap finish ERR EXIT
-sudo mount -t erofs  -o loop ${UBUNTU_DIR}/ubuntu-24.02-rootfs.img ${UBUNTU_DIR}/rootfs
+sudo mount -t erofs  -o loop ${UBUNTU_DIR}/ubuntu-24.04-rootfs.img ${UBUNTU_DIR}/rootfs
 ${UBUNTU_DIR}/ch-mount.sh -m ${UBUNTU_DIR}/rootfs
 sudo mount -t tmpfs -o size=512M tmpfs ${UBUNTU_DIR}/rootfs/tmp
 sudo mount ${UBUNTU_DIR}/homeassistant.img ${UBUNTU_DIR}/rootfs/homeassistant/
 fallocate -l 500M ${UBUNTU_DIR}/data.ext4
 mkfs.ext4 -L hassos-data ${UBUNTU_DIR}/data.ext4
 sudo mount ${UBUNTU_DIR}/data.ext4 ${UBUNTU_DIR}/rootfs/mnt/data/
-export http_proxy=http://192.168.31.126:7890
-export https_proxy=http://192.168.31.126:7890
+# export http_proxy=http://192.168.31.126:7890
+# export https_proxy=http://192.168.31.126:7890
 cat <<EOF | sudo chroot ${UBUNTU_DIR}/rootfs 
 mkdir -p /mnt/data/.homeassistant
 mkdir -p /mnt/data/home/haos
@@ -35,6 +35,7 @@ sudo -i -u haos
 
 cd /homeassistant
 source venv/bin/activate
+pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
 python3.13 -m homeassistant --config /mnt/data/.homeassistant
 
 
