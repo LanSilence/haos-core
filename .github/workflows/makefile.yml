@@ -32,14 +32,18 @@ jobs:
         sudo chmod 600 ./swapfile
         sudo mkswap ./swapfile
         sudo swapon ./swapfile
-
-    - name: build RK3399-custom
-      run: make rk3399-custom
+    - name: Monitor resources
+      run: |
+        dmesg | tail -20  # 检查内核日志
+        free -h        # 查看内存和交换空间使用情况
 
     - name: build H618-k2b
       run: |
         make clean
         make H618-k2b
+
+    - name: build RK3399-custom
+      run: make clean;make rk3399-custom
 
 
     - name: Upload build artifacts
