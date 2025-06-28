@@ -62,7 +62,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 自动使用内置Token
       with:
         files: |
-          out/images/haos*.img
+          out/images/haos*.tar.gz
           out/images/*.raucb
         tag_name: ${{ github.ref_name }}  # 使用触发工作流的标签（如v1.0.0）
         name: "Firmware Release ${{ github.ref_name }}"
