@@ -55,7 +55,7 @@ if [ -f "$IMAGEDIR/$HAOS_IMAGE_NAME" ]; then
 else
     echo "Creating HAOS image: $HAOS_IMAGE_NAME"
 fi
-rm -rf $HAOS_IMAGE_NAME
+rm -rf $IMAGEDIR/$HAOS_IMAGE_NAME
 export BOOTSTATE_SIZE SYSTEM_SIZE KERNEL_SIZE OVERLAY_SIZE DATA_SIZE HASS_SIZE IMAGEDIR HAOS_IMAGE_NAME PARTITION_TYPE
 # tool/genimage    \
 # 	--tmppath "${OUTDIR}/tmp"    \
@@ -72,7 +72,7 @@ tool/genimage --rootpath ${OUTDIR} \
     --includepath genimage:"$BOARD_DIR"\
     --config "genimage/genimage.cfg" 
 
-tar -czvf haos-${BOARD_ID}_${VERSION}-$(date +%Y%m%d).tar.gz $HAOS_IMAGE_NAME
+tar -czvf $IMAGEDIR/haos-${BOARD_ID}_${VERSION}-$(date +%Y%m%d).tar.gz $IMAGEDIR/$HAOS_IMAGE_NAME
 rm $IMAGEDIR/homeassistant.img
 export TARGET_CONFIG IMAGEDIR OUTDIR BOARD_ID SYSTEM_VERSION
 $SCRIPTS_DIR/mk-raucbundle.sh 
