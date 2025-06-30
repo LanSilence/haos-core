@@ -43,7 +43,7 @@ jobs:
         make H618-k2b
 
     - name: build RK3399-custom
-      run: make clean;make rk3399-custom
+      run: make rk3399-custom
 
 
     - name: Upload build artifacts
