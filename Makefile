@@ -27,8 +27,8 @@ $(TARGETS):
 	cp ${ROOTDIR}/board/$@/linux-config ${OUTDIR}/linux-${LINUX_VERSION}/.config
 	make -C ${SOURCE_DIR}/linux/linux-${LINUX_VERSION} O=${OUTDIR}/linux-${LINUX_VERSION} ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} olddefconfig
 	make -C ${SOURCE_DIR}/linux/linux-${LINUX_VERSION} O=${OUTDIR}/linux-${LINUX_VERSION}  ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE}  -j12
-	sudo rm -rf ${OUTDIR}/linux-${LINUX_VERSION}/lib/modules/
-	sudo make -C ${SOURCE_DIR}/linux/linux-${LINUX_VERSION} O=${OUTDIR}/linux-${LINUX_VERSION}  INSTALL_MOD_STRIP=1 ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} -j12 \
+	rm -rf ${OUTDIR}/linux-${LINUX_VERSION}/lib/modules/
+	make -C ${SOURCE_DIR}/linux/linux-${LINUX_VERSION} O=${OUTDIR}/linux-${LINUX_VERSION}  INSTALL_MOD_STRIP=1 ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} -j12 \
 		modules_install INSTALL_MOD_PATH=${ROOTDIR}/ubuntu/binary
 	@echo "==> 编译 u-boot"
 	mkdir -p ${OUTDIR}/u-boot-${UBOOT_VERSION}/
@@ -52,7 +52,7 @@ clean:
 	@echo "==> 清理编译产物"
 	rm -rf ${OUTDIR}/linux-${LINUX_VERSION}
 	rm -rf ${OUTDIR}/u-boot-${UBOOT_VERSION}
-	sudo rm -rf ${ROOTDIR}/ubuntu/binary/
+	rm -rf ${ROOTDIR}/ubuntu/binary/
 	rm -rf ${ROOTDIR}/ubuntu/*.img
 	rm -rf ${OUTDIR}/*.gz
 	rm -rf ${OUTDIR}/*.tar.gz

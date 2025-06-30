@@ -63,9 +63,9 @@ if [ ! -f cache/.ubuntubase ]; then
 fi
 if [ ! -d ubuntu/binary ] || [ -z "$(ls -A ubuntu/binary 2>/dev/null)" ]; then
     mkdir -p ubuntu/binary
-    sudo tar -xzf ${UBUNTU_CACHE} -C ubuntu/binary
+    tar -xzf ${UBUNTU_CACHE} -C ubuntu/binary
     # sudo mkdir $TARGET_ROOTFS_DIR/lib/modules
     # sudo chmod 0666 $TARGET_ROOTFS_DIR/lib/modules
-    sudo cp -b /etc/resolv.conf $TARGET_ROOTFS_DIR/etc/resolv.conf
-    sudo cp -b /usr/bin/qemu-aarch64-static $TARGET_ROOTFS_DIR/usr/bin/
+    cp -b /etc/resolv.conf $TARGET_ROOTFS_DIR/etc/resolv.conf
+    cp -b /usr/bin/qemu-aarch64-static $TARGET_ROOTFS_DIR/usr/bin/
 fi
