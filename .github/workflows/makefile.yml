@@ -2,7 +2,7 @@ name: Build and Release Firmware
 
 on:
   push:
-    tags: ["v*"]  # 仅当推送v开头的标签时触发（如v1.0.0）
+    branches: [ "ubuntu24-hass6.3" ]
   workflow_dispatch:  # 支持手动触发
 
 jobs:
