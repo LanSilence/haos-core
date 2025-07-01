@@ -49,7 +49,7 @@ cp ubuntu-24.04-rootfs.img "$IMAGEDIR"/system.img
 cd -
 
 
-HAOS_IMAGE_NAME=haos-${BOARD_ID}_${VERSION}-$(date +%Y%m%d).img
+HAOS_IMAGE_NAME=haos-${BOARD_ID}_${SYSTEM_VERSION}-$(date +%Y%m%d).img
 if [ -f "$IMAGEDIR/$HAOS_IMAGE_NAME" ]; then
     echo "HAOS image $HAOS_IMAGE_NAME already exists, skipping creation."
 else
@@ -72,8 +72,8 @@ tool/genimage --rootpath ${OUTDIR} \
     --includepath genimage:"$BOARD_DIR"\
     --config "genimage/genimage.cfg" 
 
-tar -czvf $IMAGEDIR/haos-${BOARD_ID}_${VERSION}-$(date +%Y%m%d).tar.gz $IMAGEDIR/$HAOS_IMAGE_NAME
-rm $IMAGEDIR/homeassistant.img
+tar -czvf $IMAGEDIR/haos-${BOARD_ID}_${SYSTEM_VERSION}-$(date +%Y%m%d).tar.gz $IMAGEDIR/$HAOS_IMAGE_NAME
+rm $IMAGEDIR/homeassistant.img $IMAGEDIR/$HAOS_IMAGE_NAME
 export TARGET_CONFIG IMAGEDIR OUTDIR BOARD_ID SYSTEM_VERSION
 $SCRIPTS_DIR/mk-raucbundle.sh 
 rm $IMAGEDIR/system.img
