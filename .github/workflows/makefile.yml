@@ -2,7 +2,7 @@ name: Build and Release Firmware
 
 on:
   push:
-    branches: [ "ubuntu24-hass6.3" ]
+    branches: [ "hass-core-6.3" ]
   workflow_dispatch:  # 支持手动触发
 
 jobs:
