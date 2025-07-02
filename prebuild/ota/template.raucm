@@ -1,12 +1,15 @@
 [update]
 compatible=haos-rauc
-version=0.00.06
+version=0.1.5
 description=Home Assistant OS Update
 [hooks]
 filename=switch-slot.sh
 
 [image.rootfs]
 filename=system.img
+
+[image.hasscore]
+filename=homeassistant.img
 
 
 [image.kernel]

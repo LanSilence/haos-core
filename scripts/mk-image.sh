@@ -72,8 +72,8 @@ tool/genimage --rootpath ${OUTDIR} \
     --includepath genimage:"$BOARD_DIR"\
     --config "genimage/genimage.cfg" 
 
-tar -czvf $IMAGEDIR/haos-${BOARD_ID}_${SYSTEM_VERSION}-$(date +%Y%m%d).tar.gz $IMAGEDIR/$HAOS_IMAGE_NAME
-rm $IMAGEDIR/homeassistant.img $IMAGEDIR/$HAOS_IMAGE_NAME
+tar -czvf $IMAGEDIR/haos-${BOARD_ID}_${SYSTEM_VERSION}-$(date +%Y%m%d).tar.gz -C $IMAGEDIR $HAOS_IMAGE_NAME
+rm $IMAGEDIR/$HAOS_IMAGE_NAME
 export TARGET_CONFIG IMAGEDIR OUTDIR BOARD_ID SYSTEM_VERSION
 $SCRIPTS_DIR/mk-raucbundle.sh 
-rm $IMAGEDIR/system.img
+rm $IMAGEDIR/system.img $IMAGEDIR/homeassistant.img
