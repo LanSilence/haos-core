@@ -59,14 +59,18 @@ clean:
 	rm -rf ${OUTDIR}/*.zip
 	rm -rf ${ROOTDIR}/ubuntu/.homeassistantimg
 	rm -rf ${ROOTDIR}/ubuntu/.ubuntuimg
+	rm -rf ${ROOTDIR}/ubuntu/hass-core
 
 cleanall: clean
 	@echo "==> 清理所有编译产物"
 	rm -rf ${OUTDIR}
+	rm -rf ${ROOTDIR}/cache
 	rm -rf ${ROOTDIR}/tool/toolchain
 	rm -rf ${ROOTDIR}/ubuntu/binary
+	rm -rf ${ROOTDIR}/ubuntu/cache
 	rm -rf ${ROOTDIR}/ubuntu/*.img
 	rm -rf ${ROOTDIR}/ubuntu/.homeassistantimg
 	rm -rf ${ROOTDIR}/ubuntu/.ubuntuimg
+	rm -rf ${ROOTDIR}/ubuntu/rootfs.tar.gz
 
 PHONY: clean cleanall $(TARGETS)

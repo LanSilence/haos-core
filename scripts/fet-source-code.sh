@@ -9,7 +9,7 @@ fi
 
 LINUX_VERSION=${LINUX_VERSION:-6.12}
 UBOOT_VERSION=${UBOOT_VERSION:-2025.01}
-HASS_VERSION=${HASS_VERSION:-2025.5.3}
+HASS_VERSION=${HASS_VERSION:-2025.6.3}
 SOURCE_DIR=source
 LINUX_SOURCE=https://github.com/torvalds/linux/archive/refs/tags/v${LINUX_VERSION}.tar.gz
 LINUX_CACHE=cache/linux-v${LINUX_VERSION}
@@ -44,7 +44,7 @@ if [ ! -d ${SOURCE_DIR}/homeassistant-core ] || [ -z "$(ls -A ${SOURCE_DIR}/home
 fi
 
 # 解压并覆盖官方 translations（如有 translations.zip）
-TRANSLATIONS_ZIP=prebuild/translations/translations5.3.zip
+TRANSLATIONS_ZIP=prebuild/translations/translations6.3.zip
 TRANSLATIONS_TAR=translations.tar.gz
 TRANSLATIONS_DIR=${SOURCE_DIR}/homeassistant-core/core-${HASS_VERSION}/
 if [ ! -f cache/.translations ] && [ -f $TRANSLATIONS_ZIP ]; then
@@ -55,17 +55,8 @@ if [ ! -f cache/.translations ] && [ -f $TRANSLATIONS_ZIP ]; then
     fi
 fi
 
-UBUNTU_BASE=https://cdimage.ubuntu.com/ubuntu-base/releases/noble/release/ubuntu-base-24.04.2-base-arm64.tar.gz
-UBUNTU_CACHE=cache/ubuntu-base
-TARGET_ROOTFS_DIR=ubuntu/binary
-if [ ! -f cache/.ubuntubase ]; then
-    wget -O ${UBUNTU_CACHE} ${UBUNTU_BASE} && touch cache/.ubuntubase
+if [ ! -d ubuntu/hass-core ]  || [ -z "$(ls -A ubuntu/hass-core 2>/dev/null)"];then
+    mkdir -p ubuntu/hass-core
+    cp -r ${SOURCE_DIR}/homeassistant-core/core-${HASS_VERSION}/* ubuntu/hass-core/
 fi
-if [ ! -d ubuntu/binary ] || [ -z "$(ls -A ubuntu/binary 2>/dev/null)" ]; then
-    mkdir -p ubuntu/binary
-    tar -xzf ${UBUNTU_CACHE} -C ubuntu/binary
-    # sudo mkdir $TARGET_ROOTFS_DIR/lib/modules
-    # sudo chmod 0666 $TARGET_ROOTFS_DIR/lib/modules
-    cp -b /etc/resolv.conf $TARGET_ROOTFS_DIR/etc/resolv.conf
-    cp -b /usr/bin/qemu-aarch64-static $TARGET_ROOTFS_DIR/usr/bin/
-fi
+
