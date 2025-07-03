@@ -78,11 +78,9 @@ CLEAN_FILES := \
 	${OUTDIR}/linux-${LINUX_VERSION} \
 	${OUTDIR}/u-boot-${UBOOT_VERSION} \
 	${ROOTDIR}/ubuntu/binary/ \
-	${ROOTDIR}/ubuntu/*.img \
 	${OUTDIR}/*.gz \
 	${OUTDIR}/*.tar.gz \
 	${OUTDIR}/*.zip \
-	${ROOTDIR}/ubuntu/.homeassistantimg \
 	${ROOTDIR}/ubuntu/.ubuntuimg \
 	${ROOTDIR}/ubuntu/hass-core \
 	${OUTDIR}/.last_target
@@ -93,7 +91,9 @@ CLEANALL_FILES := \
 	${ROOTDIR}/cache \
 	${ROOTDIR}/tool/toolchain \
 	${ROOTDIR}/ubuntu/cache \
-	${ROOTDIR}/ubuntu/rootfs.tar.gz
+	${ROOTDIR}/ubuntu/rootfs.tar.gz \
+	${ROOTDIR}/ubuntu/*.img \
+	${ROOTDIR}/ubuntu/.homeassistantimg \
 
 clean:
 	$(Q)echo "==> 清理编译产物"

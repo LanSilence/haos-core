@@ -45,7 +45,7 @@ git clone --recurse-submodules https://github.com/LanSilence/haos-core.git
 
 # 安装依赖
 sudo apt-get update
-sudo apt-get install -y libconfuse-dev qemu-user-static make gcc u-boot-tools mtools erofs-utils
+sudo apt-get install -y libconfuse-dev qemu-user-static make gcc u-boot-tools mtools erofs-utils rauc
 pip install pyelftools
 ```
 
