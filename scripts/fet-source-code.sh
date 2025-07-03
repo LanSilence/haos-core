@@ -55,7 +55,7 @@ if [ ! -f cache/.translations ] && [ -f $TRANSLATIONS_ZIP ]; then
     fi
 fi
 
-if [ ! -d ubuntu/hass-core ]  || [ -z "$(ls -A ubuntu/hass-core 2>/dev/null)"];then
+if [ ! -d ubuntu/hass-core ] || [ -z "$(ls -A ubuntu/hass-core 2>/dev/null)" ];then
     mkdir -p ubuntu/hass-core
     cp -r ${SOURCE_DIR}/homeassistant-core/core-${HASS_VERSION}/* ubuntu/hass-core/
 fi
