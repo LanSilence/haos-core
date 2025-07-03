@@ -29,6 +29,7 @@ function hassos_pre_image() {
     mkimage -C none -A arm -T script -d ${BOARD_DIR}/uboot-boot.ush ${IMAGEDIR}/boot.scr  
     ${BOARD_DIR}/rkbin/loaderimage --pack --uboot ${OUTDIR}/u-boot-${UBOOT_VERSION}/u-boot.bin ${OUTDIR}/u-boot-${UBOOT_VERSION}/u-boot.img 0x200000
     cp ${OUTDIR}/u-boot-${UBOOT_VERSION}/u-boot.img ${IMAGEDIR}/u-boot.img
+    rm -rf ${OUTDIR}/tmp
     tool/genimage    \
 	--tmppath "${OUTDIR}/tmp"    \
 	--inputpath "${IMAGEDIR}"  \

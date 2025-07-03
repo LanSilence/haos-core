@@ -29,7 +29,7 @@ $(TARGETS):
 	make -C ${SOURCE_DIR}/linux/linux-${LINUX_VERSION} O=${OUTDIR}/linux-${LINUX_VERSION}  ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE}  -j12
 	rm -rf ${OUTDIR}/linux-${LINUX_VERSION}/lib/modules/
 	make -C ${SOURCE_DIR}/linux/linux-${LINUX_VERSION} O=${OUTDIR}/linux-${LINUX_VERSION}  INSTALL_MOD_STRIP=1 ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} -j12 \
-		modules_install INSTALL_MOD_PATH=${ROOTDIR}/ubuntu/binary
+		modules_install INSTALL_MOD_PATH=${ROOTDIR}/ubuntu/binary/usr
 	@echo "==> 编译 u-boot"
 	mkdir -p ${OUTDIR}/u-boot-${UBOOT_VERSION}/
 	cp ${ROOTDIR}/board/$@/uboot-config ${OUTDIR}/u-boot-${UBOOT_VERSION}/.config

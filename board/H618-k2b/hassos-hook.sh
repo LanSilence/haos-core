@@ -25,6 +25,7 @@ function hassos_pre_image() {
     cp "${BOARD_DIR}/cmdline.txt" "${IMAGEDIR}/cmdline.txt"
     mkimage -C none -A arm -T script -d ${BOARD_DIR}/uboot-boot.ush ${IMAGEDIR}/boot.scr  
     cp ${OUTDIR}/u-boot-${UBOOT_VERSION}/u-boot-sunxi-with-spl.bin ${IMAGEDIR}/u-boot-sunxi-with-spl.bin 
+    rm -rf ${OUTDIR}/tmp
     tool/genimage    \
 	--tmppath "${OUTDIR}/tmp"    \
 	--inputpath "${IMAGEDIR}"  \
