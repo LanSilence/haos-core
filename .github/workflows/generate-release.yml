@@ -28,8 +28,13 @@ jobs:
         git submodule foreach --quiet '
           MODULE_PATH=$path
           CURRENT_SHA=$(git rev-parse HEAD)
-          PREV_SHA=$(git rev-parse ${PREV_TAG}^{commit})
-          COMMITS=$(git log --pretty=format:"- [子模块] %h %s (%an)" ${PREV_SHA}..${CURRENT_SHA})
+          # 获取子模块在PREV_TAG时的commit
+          PREV_SHA=$(git rev-list -n 1 ${PREV_TAG} -- ${MODULE_PATH} 2>/dev/null || echo "")
+          if [ -z "${PREV_SHA}" ]; then
+            # 如果找不到PREV_TAG对应的commit，使用子模块初始commit
+            PREV_SHA=$(git rev-list --max-parents=0 HEAD)
+          fi
+          COMMITS=$(git log --pretty=format:"- [子模块] %h %s (%an)" ${PREV_SHA}..${CURRENT_SHA} 2>/dev/null || echo "  - 无变更记录")
           SUBMODULE_INFO="${SUBMODULE_INFO}
           ### 子模块 ${MODULE_PATH}
           - Commit变更: ${PREV_SHA:0:7} → ${CURRENT_SHA:0:7}
