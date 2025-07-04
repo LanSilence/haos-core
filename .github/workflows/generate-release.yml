@@ -25,19 +25,38 @@ jobs:
         MAIN_COMMITS=$(git log --pretty=format:"- [主项目] %h %s (%an)" ${PREV_TAG}..${CURRENT_TAG})
         
         SUBMODULE_INFO=""
+        # 初始化子模块信息变量
+        SUBMODULE_INFO=""
+        
+        # 处理master分支的特殊情况
+        if [ "${CURRENT_TAG}" = "master" ]; then
+          PREV_TAG=$(git rev-parse HEAD~1)
+        fi
+        
+        # 遍历子模块收集变更信息
         git submodule foreach --quiet '
-          MODULE_PATH=$path
+          MODULE_PATH="$path"
           CURRENT_SHA=$(git rev-parse HEAD)
+          
           # 获取子模块在PREV_TAG时的commit
-          PREV_SHA=$(git rev-list -n 1 ${PREV_TAG} -- ${MODULE_PATH} 2>/dev/null || echo "")
+          if [ "${CURRENT_TAG}" = "master" ]; then
+            PREV_SHA=$(git rev-parse HEAD~1)
+          else
+            PREV_SHA=$(git rev-list -n 1 "${PREV_TAG}" -- "${MODULE_PATH}" 2>/dev/null || echo "")
+          fi
+          
           if [ -z "${PREV_SHA}" ]; then
             # 如果找不到PREV_TAG对应的commit，使用子模块初始commit
             PREV_SHA=$(git rev-list --max-parents=0 HEAD)
           fi
-          COMMITS=$(git log --pretty=format:"- [子模块] %h %s (%an)" ${PREV_SHA}..${CURRENT_SHA} 2>/dev/null || echo "  - 无变更记录")
+          
+          # 收集commit历史
+          COMMITS=$(git log --pretty=format:"- [子模块] %h %s (%an)" "${PREV_SHA}".."${CURRENT_SHA}" 2>/dev/null || echo "  - 无变更记录")
+          
+          # 追加到子模块信息
           SUBMODULE_INFO="${SUBMODULE_INFO}
           ### 子模块 ${MODULE_PATH}
-          - Commit变更: ${PREV_SHA:0:7} → ${CURRENT_SHA:0:7}
+          - Commit变更: $(echo "${PREV_SHA}" | cut -c1-7) → $(echo "${CURRENT_SHA}" | cut -c1-7)
           ${COMMITS}
           "
         '
