@@ -1,0 +1,65 @@
+name: Build and Release Firmware
+
+on:
+  push:
+    branches: ["master"]  # 仅当推送v开头的标签时触发（如v1.0.0）
+  workflow_dispatch:  # 支持手动触发
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+          fetch-depth: 0
+          submodules: true
+
+    - name: Generate Release Notes
+      id: release_notes
+      run: |
+        CURRENT_TAG="${{ github.ref_name}}"
+        PREV_TAG=$(git describe --abbrev=0 --tags ${CURRENT_TAG}^)
+        
+        MAIN_COMMITS=$(git log --pretty=format:"- [主项目] %h %s (%an)" ${PREV_TAG}..${CURRENT_TAG})
+        
+        SUBMODULE_INFO=""
+        git submodule foreach --quiet '
+          MODULE_PATH=$path
+          CURRENT_SHA=$(git rev-parse HEAD)
+          PREV_SHA=$(git rev-parse ${PREV_TAG}^{commit})
+          COMMITS=$(git log --pretty=format:"- [子模块] %h %s (%an)" ${PREV_SHA}..${CURRENT_SHA})
+          SUBMODULE_INFO="${SUBMODULE_INFO}
+          ### 子模块 ${MODULE_PATH}
+          - Commit变更: ${PREV_SHA:0:7} → ${CURRENT_SHA:0:7}
+          ${COMMITS}
+          "
+        '
+
+        NOTES=$(cat <<EOF
+        ### 版本变更记录 (${PREV_TAG} → ${CURRENT_TAG})
+        
+        #### 主项目变更
+        ${MAIN_COMMITS}
+        
+        #### 子模块变更
+        ${SUBMODULE_INFO}
+        
+        ### 构建信息
+        * 版本: ${CURRENT_TAG}
+        * 构建时间: $(date)
+        EOF
+        )
+        
+        echo "notes=${NOTES}" >> $GITHUB_OUTPUT
+
+    - name: Publish to GitHub Releases
+      uses: softprops/action-gh-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref_name }}
+        name: "Haos-core Release ${{ github.ref_name }}"
+        body: ${{ steps.release_notes.outputs.notes }}
+        draft: false
