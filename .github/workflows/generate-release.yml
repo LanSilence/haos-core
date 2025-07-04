@@ -2,7 +2,8 @@ name: Build and Release Firmware
 
 on:
   push:
-    branches: ["master"]  # 仅当推送v开头的标签时触发（如v1.0.0）
+    tags: ["v*"]  # 仅当推送v开头的标签时触发（如v1.0.0）
+    branches: ["master"]
   workflow_dispatch:  # 支持手动触发
 
 jobs:
@@ -19,7 +20,7 @@ jobs:
     - name: Generate Release Notes
       id: release_notes
       run: |
-        CURRENT_TAG="${{ github.ref_name}}"
+        CURRENT_TAG="v0.1.9"
         PREV_TAG=$(git describe --abbrev=0 --tags ${CURRENT_TAG}^)
         
         MAIN_COMMITS=$(git log --pretty=format:"- [主项目] %h %s (%an)" ${PREV_TAG}..${CURRENT_TAG})
@@ -51,7 +52,7 @@ jobs:
           fi
           
           # 收集commit历史
-          COMMITS=$(git log --pretty=format:"- [子模块] %h %s (%an)" "${PREV_SHA}".."${CURRENT_SHA}" 2>/dev/null || echo "  - 无变更记录")
+          COMMITS=$(git log --pretty=format:"- [子模块] %h %s (%an)" "${CURRENT_SHA}".."${PREV_SHA}" 2>/dev/null || echo "  - 无变更记录")
           
           # 追加到子模块信息
           SUBMODULE_INFO="${SUBMODULE_INFO}
@@ -61,20 +62,7 @@ jobs:
           "
         '
 
-        NOTES=$(cat <<EOF
-        ### 版本变更记录 (${PREV_TAG} → ${CURRENT_TAG})
-        
-        #### 主项目变更
-        ${MAIN_COMMITS}
-        
-        #### 子模块变更
-        ${SUBMODULE_INFO}
-        
-        ### 构建信息
-        * 版本: ${CURRENT_TAG}
-        * 构建时间: $(date)
-        EOF
-        )
+        NOTES="### 版本变更记录 (${CURRENT_TAG} → ${PREV_TAG})\n\n#### 主项目变更\n${MAIN_COMMITS}\n\n#### 子模块变更\n${SUBMODULE_INFO}\n\n### 构建信息\n* 版本: ${CURRENT_TAG}\n* 构建时间: $(date)"
         
         echo "notes=${NOTES}" >> $GITHUB_OUTPUT
 
