@@ -18,8 +18,12 @@ echo "kernel.img SHA256: $KERNEL_SHA256"
 echo "system sha256: $SYSTEM_SHA256" > $OUTDIR/ota.sha256
 echo "kernel sha256: $KERNEL_SHA256" >> $OUTDIR/ota.sha256
 
+
+RAUC_COMPATIBLE=haos-rauc-$BOARD_ID
+
 cp $PREPARE_DIR/template.raucm  $OTA_DIR/manifest.raucm
 sed -i "s/\(version=\).*/\1${SYSTEM_VERSION}/" $OTA_DIR/manifest.raucm
+sed -i "s/\(compatible=\).*/\1${RAUC_COMPATIBLE}/" $OTA_DIR/manifest.raucm
 cp $PREPARE_DIR/switch-slot.sh  $OTA_DIR/switch-slot.sh
 
 # 构建RAUC bundle（需要签名证书）
