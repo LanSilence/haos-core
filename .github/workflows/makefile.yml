@@ -69,6 +69,15 @@ jobs:
           out/images/haos*.tar.gz
           out/images/*.raucb
         tag_name: ${{ github.ref_name }}  # 使用触发工作流的标签（如v1.0.0）
-        name: "Firmware Release ${{ github.ref_name }}"
-        body: "自动化构建的固件镜像，包含以下文件：\n- RK3399-custom镜像\n- H618-k2b镜像"
+        name: "Haos-core Release ${{ github.ref_name }}"
+        body: |
+          ### 自动化构建的固件镜像，包含以下文件：
+          - RK3399-custom镜像
+          - H618-k2b镜像 
+          - rauc 升级包 
+          ### 版本信息
+          * 版本: ${{ github.ref_name }}
+          * Commit: ${{ github.sha }}
+          * 提交信息: ${{ github.event.head_commit.message }}
+          * 提交者: ${{ github.event.head_commit.author.name }}
         draft: false  # 直接发布，非草稿模式
