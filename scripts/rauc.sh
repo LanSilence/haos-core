@@ -6,6 +6,11 @@ SCRIPTS_DIR=$(dirname "$(readlink -f "$0")")
 OUT_DIR=${SCRIPTS_DIR}/../out
 TARGET_DIR=${SCRIPTS_DIR}/../ubuntu/binary
 
+if [ -f "$TARGET_CONFIG" ]; then
+    source "$TARGET_CONFIG"
+else
+    echo "警告: 未找到配置文件 $TARGET_CONFIG"
+fi
 
 function prepare_rauc_signing() {
     local key="${OUT_DIR}/key.pem"
@@ -47,5 +52,13 @@ function install_rauc_certs() {
     fi
 }
 
+function config_rauc() {
+    local RAUC_COMPATIBLE=haos-rauc-$BOARD_ID
+    mkdir -p ${TARGET_DIR}/etc/rauc/
+    cp "${SCRIPTS_DIR}/../prebuild/ota/rauc.conf" "${TARGET_DIR}/etc/rauc/system.conf"
+    sed -i "s/\(compatible=\).*/\1${RAUC_COMPATIBLE}/" "${TARGET_DIR}/etc/rauc/system.conf"
+    cat ${TARGET_DIR}/etc/rauc/system.conf
+}
+config_rauc
 prepare_rauc_signing
 install_rauc_certs
