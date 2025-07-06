@@ -1,4 +1,4 @@
-name: Build and Release Firmware
+name: Generate Release note
 
 on:
   push:
@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -20,19 +19,22 @@ jobs:
     - name: Generate Release Notes
       id: release_notes
       run: |
-        CURRENT_TAG="v0.1.9"
-        PREV_TAG=$(git describe --abbrev=0 --tags ${CURRENT_TAG}^)
+        # 获取当前标签（从GitHub环境变量获取）
+        CURRENT_TAG="${GITHUB_REF#refs/tags/}"
         
-        MAIN_COMMITS=$(git log --pretty=format:"- [主项目] %h %s (%an)" ${PREV_TAG}..${CURRENT_TAG})
+        # 获取上一个标签
+        PREV_TAG=$(git describe --abbrev=0 --tags ${CURRENT_TAG}^ 2>/dev/null || echo "")
         
-        SUBMODULE_INFO=""
-        # 初始化子模块信息变量
-        SUBMODULE_INFO=""
-        
-        # 处理master分支的特殊情况
-        if [ "${CURRENT_TAG}" = "master" ]; then
-          PREV_TAG=$(git rev-parse HEAD~1)
+        # 如果没有找到上一个标签（首次发布），使用初始提交
+        if [ -z "${PREV_TAG}" ]; then
+          PREV_TAG=$(git rev-list --max-parents=0 HEAD)
         fi
+
+        # 生成主项目变更日志（使用安全格式）
+        MAIN_COMMITS=$(git log --pretty=format:"- [主项目] %h %s (by %%an)" ${PREV_TAG}..${CURRENT_TAG} | sed 's/%/%%/g')
+        
+        # 初始化子模块信息
+        SUBMODULE_INFO=""
         
         # 遍历子模块收集变更信息
         git submodule foreach --quiet '
@@ -40,31 +42,36 @@ jobs:
           CURRENT_SHA=$(git rev-parse HEAD)
           
           # 获取子模块在PREV_TAG时的commit
-          if [ "${CURRENT_TAG}" = "master" ]; then
-            PREV_SHA=$(git rev-parse HEAD~1)
-          else
-            PREV_SHA=$(git rev-list -n 1 "${PREV_TAG}" -- "${MODULE_PATH}" 2>/dev/null || echo "")
-          fi
+          PREV_SHA=$(git rev-list -n 1 "${PREV_TAG}" -- "${MODULE_PATH}" 2>/dev/null || git rev-list --max-parents=0 HEAD)
           
-          if [ -z "${PREV_SHA}" ]; then
-            # 如果找不到PREV_TAG对应的commit，使用子模块初始commit
-            PREV_SHA=$(git rev-list --max-parents=0 HEAD)
-          fi
+          # 生成子模块变更日志（使用安全格式）
+          COMMITS=$(git log --pretty=format:"- [子模块] %h %s (by %%an)" "${PREV_SHA}".."${CURRENT_SHA}" 2>/dev/null | sed "s/%/%%/g")
           
-          # 收集commit历史
-          COMMITS=$(git log --pretty=format:"- [子模块] %h %s (%an)" "${CURRENT_SHA}".."${PREV_SHA}" 2>/dev/null || echo "  - 无变更记录")
-          
-          # 追加到子模块信息
+          # 格式化子模块信息
           SUBMODULE_INFO="${SUBMODULE_INFO}
           ### 子模块 ${MODULE_PATH}
           - Commit变更: $(echo "${PREV_SHA}" | cut -c1-7) → $(echo "${CURRENT_SHA}" | cut -c1-7)
-          ${COMMITS}
+          ${COMMITS:-"  - 无变更记录"}
           "
-        '
-
-        NOTES="### 版本变更记录 (${CURRENT_TAG} → ${PREV_TAG})\n\n#### 主项目变更\n${MAIN_COMMITS}\n\n#### 子模块变更\n${SUBMODULE_INFO}\n\n### 构建信息\n* 版本: ${CURRENT_TAG}\n* 构建时间: $(date)"
+        ' || true  # 防止子模块失败导致整个步骤失败
         
-        echo "notes=${NOTES}" >> $GITHUB_OUTPUT
+        # 构建发布说明（使用安全的多行文本）
+        NOTES="### 版本变更记录 (${CURRENT_TAG} → ${PREV_TAG})
+        
+        #### 主项目变更
+        ${MAIN_COMMITS:-"  - 无变更记录"}
+        
+        #### 子模块变更
+        ${SUBMODULE_INFO}
+        
+        ### 构建信息
+        * 版本: ${CURRENT_TAG}
+        * 构建时间: $(date)"
+
+        # 安全输出到环境变量
+        NOTES="${NOTES//'%'/'%%'}"  # 转义所有百分号
+        NOTES="${NOTES//$'\n'/'%0A'}"  # 换行符转义
+        echo "notes=$NOTES" >> $GITHUB_OUTPUT
 
     - name: Publish to GitHub Releases
       uses: softprops/action-gh-release@v1
