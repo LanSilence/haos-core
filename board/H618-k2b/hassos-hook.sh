@@ -5,6 +5,7 @@ BOARD_DIR="$(dirname "$(readlink -f "$0")")"
 
 OUTDIR=${2:-"output"}
 IMAGEDIR=${OUTDIR}/images
+TARGET_ROOTFS_DIR=ubuntu/binary
 
 BOARD_CONFIG=${BOARD_DIR}/config.mk
 if [ -f "$BOARD_CONFIG" ]; then
@@ -46,4 +47,6 @@ mkdir -p "${OUTDIR}/root"
 hassos_pre_image
 rm -rf "${OUTDIR}/root"
 echo "Bootloader images generated in ${IMAGEDIR}"
+
+cp -rpf ${BOARD_DIR}/overlay/* ${TARGET_ROOTFS_DIR}/
 

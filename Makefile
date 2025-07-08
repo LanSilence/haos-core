@@ -51,7 +51,7 @@ $(TARGETS):
 		ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} olddefconfig
 	$(Q)set -e; make -C ${SOURCE_DIR}/linux/linux-${LINUX_VERSION} O=${OUTDIR}/linux-${LINUX_VERSION} \
 		ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} -j$(LINUX_JOBS)
-	$(Q)rm -rf ${OUTDIR}/linux-${LINUX_VERSION}/lib/modules/
+	$(Q)rm -rf ${ROOTDIR}/ubuntu/binary/usr/lib/modules/
 	$(Q)set -e; make -C ${SOURCE_DIR}/linux/linux-${LINUX_VERSION} O=${OUTDIR}/linux-${LINUX_VERSION} \
 		INSTALL_MOD_STRIP=1 ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} -j$(LINUX_JOBS) \
 		modules_install INSTALL_MOD_PATH=${ROOTDIR}/ubuntu/binary/usr
