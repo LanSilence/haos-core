@@ -127,6 +127,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
+        files: |
+          out/*.gz
+          out/*.raucb
         tag_name: ${{ github.ref_name }}
         name: "Haos-core Release ${{ github.ref_name }}"
         body: ${{ steps.release_notes.outputs.notes }}
