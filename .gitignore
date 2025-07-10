@@ -9,3 +9,4 @@ u-boot/*
 
 .cache/
 source
+.vscode/tasks.json
